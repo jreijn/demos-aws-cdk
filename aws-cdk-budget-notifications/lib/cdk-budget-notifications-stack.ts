@@ -37,7 +37,7 @@ export class CdkBudgetNotificationsStack extends cdk.Stack {
         }));
 
         // Add email subscription
-        topic.addSubscription(new EmailSubscription("<your email addres>"));
+        topic.addSubscription(new EmailSubscription("<your email address>"));
 
         // Add resource policy to allow the budgets service to publish to the sns topic
         topic.addToResourcePolicy(new PolicyStatement({
