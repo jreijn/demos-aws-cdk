@@ -1,0 +1,16 @@
+*.js
+!jest.config.js
+*.d.ts
+node_modules
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+/.idea/libraries/layer.xml
+/.idea/libraries/layer2.xml
+/.idea/.gitignore
+/.idea/aws.xml
+/.idea/aws-cdk-ecs-express.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
