@@ -35,12 +35,6 @@ export class AwsCdkWindowsDiskspaceMonitoringStack extends Stack {
             vpcName: "demo-vpc"
         })
 
-        const securityGroup = new SecurityGroup(this, 'security-group', {
-            vpc: demoVpc,
-            allowAllOutbound: true,
-            description: "SG for EC2 instance"
-        })
-
         const role = new Role(this, "instance-role", {
             assumedBy: new ServicePrincipal("ec2.amazonaws.com")
         });
@@ -51,6 +45,12 @@ export class AwsCdkWindowsDiskspaceMonitoringStack extends Stack {
         const keyPair = new KeyPair(this, 'windows-key-pair', {
             keyPairName: 'windows-demo-key'
         });
+
+        const securityGroup = new SecurityGroup(this, 'security-group', {
+            vpc: demoVpc,
+            allowAllOutbound: true,
+            description: "SG for EC2 instance"
+        })
 
         const instance = new Instance(this, "windows-demo-instance", {
             vpc: demoVpc,
@@ -64,6 +64,7 @@ export class AwsCdkWindowsDiskspaceMonitoringStack extends Stack {
             detailedMonitoring: true,
         })
         securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(3389), "Allow RDP Connections")
+
         const cwAgentConfigParam = this.createCloudWatchAgentConfiguration(role);
 
         // Write config to disk and install agent
