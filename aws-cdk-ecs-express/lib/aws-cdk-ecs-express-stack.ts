@@ -83,27 +83,23 @@ export class AwsCdkEcsExpressStack extends cdk.Stack {
             infrastructureRoleArn: infrastructureRole.roleArn,
         });
 
-        // let cfnExpressGatewayService2 = new CfnExpressGatewayService(this, 'ExpressServiceNginx2', {
-        //         cluster: cluster.clusterName,
-        //         serviceName: 'express-service-nginx-2',
-        //         primaryContainer: {
-        //             image: 'nginx:latest',
-        //         },
-        //         executionRoleArn: taskExecutionRole.roleArn,
-        //         infrastructureRoleArn: infrastructureRole.roleArn,
-        //
-        //         networkConfiguration: {
-        //             subnets: vpc.privateSubnets.map(subnet => subnet.subnetId),
-        //         },
-        //         healthCheckPath: "/",
-        //         scalingTarget: {
-        //             minTaskCount: 1,
-        //             maxTaskCount: 3,
-        //         },
-        //         cpu: '256',
-        //         memory: '256',
-        //     }
-        // );
+        let cfnExpressGatewayService2 = new CfnExpressGatewayService(this, 'ExpressServiceNginx2', {
+                cluster: cluster.clusterName,
+                serviceName: 'express-service-nginx-2',
+                primaryContainer: {
+                    image: 'nginx:latest',
+                },
+                executionRoleArn: taskExecutionRole.roleArn,
+                infrastructureRoleArn: infrastructureRole.roleArn,
+                healthCheckPath: "/",
+                scalingTarget: {
+                    minTaskCount: 1,
+                    maxTaskCount: 3,
+                },
+                cpu: '256',
+                memory: '256',
+            }
+        );
 
         const cfnWebACLAssociation = new CfnWebACLAssociation(this, 'ALBWebACLAssociation', {
             resourceArn: cfnExpressGatewayService.getAtt("ECSManagedResourceArns.IngressPath.LoadBalancerArn").toString(),
@@ -116,9 +112,9 @@ export class AwsCdkEcsExpressStack extends cdk.Stack {
             key: 'service1url',
             value: 'https://' + cfnExpressGatewayService.getAtt("Endpoint").toString()
         })
-        // new CfnOutput(this, "service2url", {
-        //     key: 'service2url',
-        //     value: 'https://' + cfnExpressGatewayService2.getAtt("Endpoint").toString()
-        // })
+        new CfnOutput(this, "service2url", {
+            key: 'service2url',
+            value: 'https://' + cfnExpressGatewayService2.getAtt("Endpoint").toString()
+        })
     }
 }
